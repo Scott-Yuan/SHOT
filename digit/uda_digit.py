@@ -441,6 +441,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     args.class_num = 10
 
+    """ Set random seeds. """
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id
     SEED = args.seed
     torch.manual_seed(SEED)
@@ -449,13 +450,15 @@ if __name__ == "__main__":
     random.seed(SEED)
     # torch.backends.cudnn.deterministic = True
 
+    """ Create directory for results. """
     args.output_dir = osp.join(args.output, 'seed' + str(args.seed), args.dset)
     if not osp.exists(args.output_dir):
         os.system('mkdir -p ' + args.output_dir)
     if not osp.exists(args.output_dir):
         os.mkdir(args.output_dir)
 
-    if not osp.exists(osp.join(args.output_dir + '/source_F.pt')):
+    # todo: 这部分在做什么？
+    if not osp.exists(osp.join(args.output_dir, 'source_F.pt')):
         args.out_file = open(osp.join(args.output_dir, 'log_src.txt'), 'w')
         args.out_file.write(print_args(args) + '\n')
         args.out_file.flush()
