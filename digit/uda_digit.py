@@ -61,6 +61,8 @@ def digit_load(args):
                                       transforms.ToTensor(),
                                       transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
                                   ]))
+        print(type(train_source))
+        exit()
     elif args.dset == 'u2m':
         train_source = usps.USPS('./data/usps/', train=True, download=True,
                                  transform=transforms.Compose([
@@ -109,17 +111,16 @@ def digit_load(args):
                                     transforms.Normalize((0.5,), (0.5,))
                                 ]))
 
-    dset_loaders = {}
-    dset_loaders["source_tr"] = DataLoader(train_source, batch_size=train_bs, shuffle=True,
-                                           num_workers=args.worker, drop_last=False)
-    dset_loaders["source_te"] = DataLoader(test_source, batch_size=train_bs * 2, shuffle=True,
-                                           num_workers=args.worker, drop_last=False)
-    dset_loaders["target"] = DataLoader(train_target, batch_size=train_bs, shuffle=True,
-                                        num_workers=args.worker, drop_last=False)
-    dset_loaders["target_te"] = DataLoader(train_target, batch_size=train_bs, shuffle=False,
-                                           num_workers=args.worker, drop_last=False)
-    dset_loaders["test"] = DataLoader(test_target, batch_size=train_bs * 2, shuffle=False,
-                                      num_workers=args.worker, drop_last=False)
+    dset_loaders = {"source_tr": DataLoader(train_source, batch_size=train_bs, shuffle=True,
+                                            num_workers=args.worker, drop_last=False),
+                    "source_te": DataLoader(test_source, batch_size=train_bs * 2, shuffle=True,
+                                            num_workers=args.worker, drop_last=False),
+                    "target": DataLoader(train_target, batch_size=train_bs, shuffle=True,
+                                         num_workers=args.worker, drop_last=False),
+                    "target_te": DataLoader(train_target, batch_size=train_bs, shuffle=False,
+                                            num_workers=args.worker, drop_last=False),
+                    "test": DataLoader(test_target, batch_size=train_bs * 2, shuffle=False,
+                                       num_workers=args.worker, drop_last=False)}
     return dset_loaders
 
 
@@ -148,7 +149,7 @@ def cal_acc(loader, netF, netB, netC):
 
 def train_source(args):
     dset_loaders = digit_load(args)
-    ## set base network
+    # set base network
     if args.dset == 'u2m':
         netF = network.LeNetBase().cuda()
     elif args.dset == 'm2u':
@@ -457,12 +458,13 @@ if __name__ == "__main__":
     if not osp.exists(args.output_dir):
         os.mkdir(args.output_dir)
 
-    # todo: 这部分在做什么？
     if not osp.exists(osp.join(args.output_dir, 'source_F.pt')):
         args.out_file = open(osp.join(args.output_dir, 'log_src.txt'), 'w')
         args.out_file.write(print_args(args) + '\n')
         args.out_file.flush()
         train_source(args)
+        # todo
+        exit()
         test_target(args)
 
     args.savename = 'par_' + str(args.cls_par)
