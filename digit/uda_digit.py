@@ -61,8 +61,6 @@ def digit_load(args):
                                       transforms.ToTensor(),
                                       transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
                                   ]))
-        print(type(train_source))
-        exit()
     elif args.dset == 'u2m':
         train_source = usps.USPS('./data/usps/', train=True, download=True,
                                  transform=transforms.Compose([
@@ -149,7 +147,8 @@ def cal_acc(loader, netF, netB, netC):
 
 def train_source(args):
     dset_loaders = digit_load(args)
-    # set base network
+
+    """ Set base network. """
     if args.dset == 'u2m':
         netF = network.LeNetBase().cuda()
     elif args.dset == 'm2u':
@@ -161,8 +160,10 @@ def train_source(args):
                                    bottleneck_dim=args.bottleneck).cuda()
     netC = network.feat_classifier(type=args.layer, class_num=args.class_num, bottleneck_dim=args.bottleneck).cuda()
 
+    """ Set optimizer. """
     param_group = []
     learning_rate = args.lr
+
     for k, v in netF.named_parameters():
         param_group += [{'params': v, 'lr': learning_rate}]
     for k, v in netB.named_parameters():
@@ -462,7 +463,9 @@ if __name__ == "__main__":
         args.out_file = open(osp.join(args.output_dir, 'log_src.txt'), 'w')
         args.out_file.write(print_args(args) + '\n')
         args.out_file.flush()
+        print(232131231)
         train_source(args)
+        print(3424324)
         # todo
         exit()
         test_target(args)
