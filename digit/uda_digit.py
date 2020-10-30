@@ -17,12 +17,14 @@ from data_load import mnist, svhn, usps
 
 
 def op_copy(optimizer):
+    """ Set init lr. """
     for param_group in optimizer.param_groups:
         param_group['lr0'] = param_group['lr']
     return optimizer
 
 
 def lr_scheduler(optimizer, iter_num, max_iter, gamma=10, power=0.75):
+    """ Set lr decay. """
     decay = (1 + gamma * iter_num / max_iter) ** (-power)
     for param_group in optimizer.param_groups:
         param_group['lr'] = param_group['lr0'] * decay
@@ -174,6 +176,7 @@ def train_source(args):
     optimizer = optim.SGD(param_group)
     optimizer = op_copy(optimizer)
 
+    """ Train models. """
     acc_init = 0
     max_iter = args.max_epoch * len(dset_loaders["source_tr"])
     interval_iter = max_iter // 10
@@ -231,7 +234,8 @@ def train_source(args):
 
 def test_target(args):
     dset_loaders = digit_load(args)
-    ## set base network
+
+    """ Set base network. """
     if args.dset == 'u2m':
         netF = network.LeNetBase().cuda()
     elif args.dset == 'm2u':
@@ -242,6 +246,7 @@ def test_target(args):
     netB = network.feat_bootleneck(type=args.classifier, feature_dim=netF.in_features,
                                    bottleneck_dim=args.bottleneck).cuda()
     netC = network.feat_classifier(type=args.layer, class_num=args.class_num, bottleneck_dim=args.bottleneck).cuda()
+
 
     args.modelpath = args.output_dir + '/source_F.pt'
     netF.load_state_dict(torch.load(args.modelpath))
@@ -254,6 +259,7 @@ def test_target(args):
     netC.eval()
 
     acc, _ = cal_acc(dset_loaders['test'], netF, netB, netC)
+
     log_str = 'Task: {}, Accuracy = {:.2f}%'.format(args.dset, acc)
     args.out_file.write(log_str + '\n')
     args.out_file.flush()
@@ -269,7 +275,8 @@ def print_args(args):
 
 def train_target(args):
     dset_loaders = digit_load(args)
-    ## set base network
+
+    """ Set base network. """
     if args.dset == 'u2m':
         netF = network.LeNetBase().cuda()
     elif args.dset == 'm2u':
@@ -279,7 +286,8 @@ def train_target(args):
 
     netB = network.feat_bootleneck(type=args.classifier, feature_dim=netF.in_features,
                                    bottleneck_dim=args.bottleneck).cuda()
-    netC = network.feat_classifier(type=args.layer, class_num=args.class_num, bottleneck_dim=args.bottleneck).cuda()
+    netC = network.feat_classifier(type=args.layer, class_num=args.class_num,
+                                   bottleneck_dim=args.bottleneck).cuda()
 
     args.modelpath = args.output_dir + '/source_F.pt'
     netF.load_state_dict(torch.load(args.modelpath))
@@ -287,6 +295,8 @@ def train_target(args):
     netB.load_state_dict(torch.load(args.modelpath))
     args.modelpath = args.output_dir + '/source_C.pt'
     netC.load_state_dict(torch.load(args.modelpath))
+
+    # Fix network C.
     netC.eval()
     for k, v in netC.named_parameters():
         v.requires_grad = False
@@ -332,7 +342,7 @@ def train_target(args):
         outputs_test = netC(features_test)
 
         if args.cls_par > 0:
-            pred = mem_label[tar_idx]
+            pred = mem_label[tar_idx].long()
             classifier_loss = args.cls_par * nn.CrossEntropyLoss()(outputs_test, pred)
         else:
             classifier_loss = torch.tensor(0.0).cuda()
@@ -388,6 +398,7 @@ def obtain_label(loader, netF, netB, netC, args, c=None):
                 all_fea = torch.cat((all_fea, feas.float().cpu()), 0)
                 all_output = torch.cat((all_output, outputs.float().cpu()), 0)
                 all_label = torch.cat((all_label, labels.float()), 0)
+
     all_output = nn.Softmax(dim=1)(all_output)
     _, predict = torch.max(all_output, 1)
     accuracy = torch.sum(torch.squeeze(predict).float() == all_label).item() / float(all_label.size()[0])
@@ -416,7 +427,8 @@ def obtain_label(loader, netF, netB, netC, args, c=None):
     args.out_file.write(log_str + '\n')
     args.out_file.flush()
     print(log_str + '\n')
-    return pred_label.astype('int')
+    # todo
+    return pred_label.astype('long')
 
 
 if __name__ == "__main__":
@@ -426,7 +438,7 @@ if __name__ == "__main__":
     parser.add_argument('--t', type=int, default=1, help="target")
     parser.add_argument('--max_epoch', type=int, default=30, help="maximum epoch")
     parser.add_argument('--batch_size', type=int, default=64, help="batch_size")
-    parser.add_argument('--worker', type=int, default=4, help="number of workers")
+    parser.add_argument('--worker', type=int, default=0, help="number of workers")
     parser.add_argument('--dset', type=str, default='s2m', choices=['u2m', 'm2u', 's2m'])
     parser.add_argument('--lr', type=float, default=0.01, help="learning rate")
     parser.add_argument('--seed', type=int, default=2020, help="random seed")
@@ -463,11 +475,7 @@ if __name__ == "__main__":
         args.out_file = open(osp.join(args.output_dir, 'log_src.txt'), 'w')
         args.out_file.write(print_args(args) + '\n')
         args.out_file.flush()
-        print(232131231)
         train_source(args)
-        print(3424324)
-        # todo
-        exit()
         test_target(args)
 
     args.savename = 'par_' + str(args.cls_par)

@@ -4,7 +4,7 @@ s:0
 t:1
 max_epoch:30
 batch_size:64
-worker:4
+worker:0
 dset:s2m
 lr:0.01
 seed:2020
@@ -22,3 +22,14 @@ class_num:10
 output_dir:seed2020\s2m
 out_file:<_io.TextIOWrapper name='seed2020\\s2m\\log_src.txt' mode='w' encoding='cp936'>
 
+Task: s2m, Iter:3435/34350; Accuracy = 90.98%/ 89.01%
+Task: s2m, Iter:6870/34350; Accuracy = 95.80%/ 91.69%
+Task: s2m, Iter:10305/34350; Accuracy = 97.87%/ 92.32%
+Task: s2m, Iter:13740/34350; Accuracy = 99.02%/ 92.37%
+Task: s2m, Iter:17175/34350; Accuracy = 99.51%/ 92.48%
+Task: s2m, Iter:20610/34350; Accuracy = 99.85%/ 92.17%
+Task: s2m, Iter:24045/34350; Accuracy = 99.92%/ 92.37%
+Task: s2m, Iter:27480/34350; Accuracy = 99.98%/ 92.30%
+Task: s2m, Iter:30915/34350; Accuracy = 99.99%/ 92.29%
+Task: s2m, Iter:34350/34350; Accuracy = 99.99%/ 92.29%
+Task: s2m, Accuracy = 67.29%
