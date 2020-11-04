@@ -301,6 +301,7 @@ def train_target(args):
     for k, v in netC.named_parameters():
         v.requires_grad = False
 
+    """ Set optimizer. """
     param_group = []
     for k, v in netF.named_parameters():
         param_group += [{'params': v, 'lr': args.lr}]
@@ -379,6 +380,7 @@ def train_target(args):
 
 
 def obtain_label(loader, netF, netB, netC, args, c=None):
+    """ Concat all features, outputs, and labels. """
     start_test = True
     with torch.no_grad():
         iter_test = iter(loader)
@@ -403,14 +405,17 @@ def obtain_label(loader, netF, netB, netC, args, c=None):
     _, predict = torch.max(all_output, 1)
     accuracy = torch.sum(torch.squeeze(predict).float() == all_label).item() / float(all_label.size()[0])
 
+    """ Feature normalization. """
     all_fea = torch.cat((all_fea, torch.ones(all_fea.size(0), 1)), 1)
     all_fea = (all_fea.t() / torch.norm(all_fea, p=2, dim=1)).t()
-    all_fea = all_fea.float().cpu().numpy()
+    all_fea = all_fea.float().cpu().numpy()  # (batch, features)
 
-    K = all_output.size(1)
-    aff = all_output.float().cpu().numpy()
-    initc = aff.transpose().dot(all_fea)
-    initc = initc / (1e-8 + aff.sum(axis=0)[:, None])
+    K = all_output.size(1)  # classes
+
+    aff = all_output.float().cpu().numpy()  # (batch, classes)
+    initc = aff.transpose().dot(all_fea)  # (classes, features)
+
+    initc = initc / (1e-8 + aff.sum(axis=0)[:, None])  # get init centroid
     dd = cdist(all_fea, initc, 'cosine')
     pred_label = dd.argmin(axis=1)
     acc = np.sum(pred_label == all_label.float().numpy()) / len(all_fea)
@@ -427,7 +432,6 @@ def obtain_label(loader, netF, netB, netC, args, c=None):
     args.out_file.write(log_str + '\n')
     args.out_file.flush()
     print(log_str + '\n')
-    # todo
     return pred_label.astype('long')
 
 

@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b371ebad-c6da-4f6a-9da0-b35e7a707f95" name="Default Changelist" comment="" />
+    <list default="true" id="b371ebad-c6da-4f6a-9da0-b35e7a707f95" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/digit/seed2020/s2m/log_src.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/digit/seed2020/s2m/log_tar_par_0.3.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/digit/seed2020/s2m/source_B.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/digit/seed2020/s2m/source_C.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/digit/seed2020/s2m/source_F.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/digit/seed2020/s2m/target_B_par_0.3.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/digit/seed2020/s2m/target_C_par_0.3.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/digit/seed2020/s2m/target_F_par_0.3.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/digit/uda_digit.py" beforeDir="false" afterPath="$PROJECT_DIR$/digit/uda_digit.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,6 +103,8 @@
       <workItem from="1603789222134" duration="9383000" />
       <workItem from="1604058720215" duration="3964000" />
       <workItem from="1604062958415" duration="5488000" />
+      <workItem from="1604143970519" duration="3809000" />
+      <workItem from="1604294970569" duration="6207000" />
     </task>
     <servers />
   </component>
@@ -111,7 +125,7 @@
     </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/SHOT$pytest_in_uda_digit_py.coverage" NAME="pytest in uda_digit.py Coverage Results" MODIFIED="1603715978700" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/digit" />
-    <SUITE FILE_PATH="coverage/SHOT$uda_digit.coverage" NAME="uda_digit Coverage Results" MODIFIED="1604067220864" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/digit" />
+    <SUITE FILE_PATH="coverage/SHOT$pytest_in_uda_digit_py.coverage" NAME="pytest in uda_digit.py Coverage Results" MODIFIED="1604295984089" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/digit" />
+    <SUITE FILE_PATH="coverage/SHOT$uda_digit.coverage" NAME="uda_digit Coverage Results" MODIFIED="1604297770738" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/digit" />
   </component>
 </project>
